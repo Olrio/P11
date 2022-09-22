@@ -5,14 +5,16 @@ from P11.server import clubs, competitions
 
 
 def setup_module(module):
-    global club, initial_points, competition
+    global club, initial_points, competition, places_left
     club = list(filter(lambda x: x['name'] == 'Iron Temple', clubs))[0]
     competition = list(filter(lambda x: x['name'] == 'Fall Classic', competitions))[0]
     initial_points = int(club["points"])
+    places_left = competition['numberOfPlaces']
 
 
 def teardown_module(module):
     club['points'] = str(initial_points)
+    competition['numberOfPlaces'] = places_left
 
 
 
