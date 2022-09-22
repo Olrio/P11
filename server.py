@@ -43,11 +43,17 @@ def showSummary():
 def book(competition,club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
+    if datetime.datetime.strptime(foundCompetition['date'], "%Y-%m-%d %H:%M:%S") < datetime.datetime.now():
+        flash(f"Sorry, the competition {foundCompetition['name']} is finished. You can't buy places anymore")
+        return render_template('welcome.html', club=foundClub, competitions=competitions), 403
     if foundClub and foundCompetition:
-        return render_template('booking.html',club=foundClub,competition=foundCompetition)
+        return render_template('booking.html',
+                               club=foundClub,
+                               competition=foundCompetition,
+                               )
     else:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html', club=foundClub, competitions=competitions)
 
 
 @app.route('/purchasePlaces',methods=['POST'])
@@ -55,9 +61,6 @@ def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
-    if datetime.datetime.strptime(competition['date'], "%Y-%m-%d %H:%M:%S") < datetime.datetime.now():
-        flash(f"Sorry, the competition {competition['name']} is finished. You can't buy places anymore")
-        return render_template('welcome.html', club=club, competitions=competitions), 403
     if placesRequired > (12 - competition[club['name']]):
         flash(f"Sorry, your total number of places can't exceed 12.")
         return render_template('welcome.html', club=club, competitions=competitions), 403
