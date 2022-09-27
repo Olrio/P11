@@ -1,7 +1,6 @@
 import pytest
 
 from ..test_config import client
-from flask import request
 
 from P11.server import clubs, competitions
 

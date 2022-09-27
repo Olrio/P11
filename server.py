@@ -60,6 +60,9 @@ def book(competition,club):
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
+    if not request.form['places']:
+        flash(f"Sorry, field 'Places' is required. Please enter a value.")
+        return render_template('welcome.html', club=club, competitions=competitions), 403
     placesRequired = int(request.form['places'])
     if placesRequired > int(competition['numberOfPlaces']):
         flash(f"Sorry, only {competition['numberOfPlaces']} places left. You can't buy {placesRequired}.")
