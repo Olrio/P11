@@ -1,22 +1,23 @@
-from unittest.mock import patch
 from ..test_config import client
+from P11.server import app
+from flask_testing import TestCase
 
 
-def simulate_index_render_template():
-    return "This is index HTML page"
+class MyTest(TestCase):
+    def create_app(self):
+        app.config.from_object("P11.tests.test_config")
+        return app
 
-def test_index_page_response_should_return_200(client):
-    response = client.get('/')
-    assert response.status_code == 200
+    def test_index_page_response_should_return_200(self):
+        response = self.client.get('/')
+        assert response.status_code == 200
+
+    def test_bad_index_page_response_should_return_404(self):
+        response = self.client.get('bad')
+        assert response.status_code == 404
 
 
-def test_bad_index_page_response_should_return_404(client):
-    response = client.get('bad')
-    assert response.status_code == 404
-
-
-def test_index_page_response_should_be_the_expected_html_page(mocker, client):
-    mocker.patch('flask.app.Flask.dispatch_request', return_value=simulate_index_render_template())
-    response = client.get('/')
-    expected_value = simulate_index_render_template()
-    assert response.data.decode() == expected_value
+    def test_index_page_response_should_be_the_expected_html_page(self):
+        with self.client:
+            self.client.get('/')
+            self.assert_template_used('index.html')
