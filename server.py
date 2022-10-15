@@ -41,19 +41,20 @@ def showSummary():
 
 @app.route('/book/<competition>/<club>')
 def book(competition,club):
-    foundClub = [c for c in clubs if c['name'] == club][0]
-    foundCompetition = [c for c in competitions if c['name'] == competition][0]
-    if datetime.datetime.strptime(foundCompetition['date'], "%Y-%m-%d %H:%M:%S") < datetime.datetime.now():
-        flash(f"Sorry, the competition {foundCompetition['name']} is finished. You can't buy places anymore")
-        return render_template('welcome.html', club=foundClub, competitions=competitions), 403
-    if foundClub and foundCompetition:
-        return render_template('booking.html',
-                               club=foundClub,
-                               competition=foundCompetition,
-                               )
-    else:
+    try:
+        foundClub = [c for c in clubs if c['name'] == club][0]
+        foundCompetition = [c for c in competitions if c['name'] == competition][0]
+        if datetime.datetime.strptime(foundCompetition['date'], "%Y-%m-%d %H:%M:%S") < datetime.datetime.now():
+            flash(f"Sorry, the competition {foundCompetition['name']} is finished. You can't buy places anymore")
+            return render_template('welcome.html', club=foundClub, competitions=competitions), 403
+        if foundClub and foundCompetition:
+            return render_template('booking.html',
+                                   club=foundClub,
+                                   competition=foundCompetition,
+                                   )
+    except IndexError:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=foundClub, competitions=competitions), 403
+        return render_template('welcome.html', club=club, competitions=competitions), 403
 
 
 @app.route('/purchasePlaces',methods=['POST'])
