@@ -32,14 +32,14 @@ class MyTest(TestCase):
                                              "competition": "Incoming Competition"})
             assert response.status_code == 200
 
-    def test_booking_places_response_should_be_the_expected_html_page_welcome_with_incoming_competition(self):
+    def test_booking_places_response_should_be_the_expected_html_page_booking_with_incoming_competition(self):
         with self.client:
             self.client.get(f"/book/Incoming Competition/Club Test 2",
                        data={"club": "Club Test 2",
                              "competition": "Incoming Competition"})
             self.assert_template_used('booking.html')
 
-    def test_booking_places_response_should_be_the_expected_html_page_index_with_past_competition(self):
+    def test_booking_places_response_should_be_the_expected_html_page_welcome_with_past_competition(self):
         with self.client:
             self.client.get(f"/book/Past Competition/Club Test 2",
                        data={"club": "Club Test 2",

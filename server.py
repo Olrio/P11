@@ -53,7 +53,7 @@ def book(competition,club):
                                )
     else:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=foundClub, competitions=competitions)
+        return render_template('welcome.html', club=foundClub, competitions=competitions), 403
 
 
 @app.route('/purchasePlaces',methods=['POST'])
