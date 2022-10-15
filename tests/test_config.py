@@ -31,7 +31,7 @@ def get_clubs(mocker):
     return clubs
 
 @pytest.fixture
-def get_competitions(mocker):
+def get_competitions(mocker, get_clubs):
     competitions = mocker.patch.object(P11.server, "competitions", [
         {
             "name": "Past Competition",
@@ -43,7 +43,10 @@ def get_competitions(mocker):
             "name": "Incoming Competition",
             "date": datetime.datetime.strftime(datetime.datetime.now() + datetime.timedelta(days=100),
                                                      "%Y-%m-%d %H:%M:%S"),
-            "numberOfPlaces": "13"
+            "numberOfPlaces": "11"
         }
     ])
+    for competition in competitions:
+        for club in get_clubs:
+            competition[club['name']] = 0
     return competitions

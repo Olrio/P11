@@ -1,32 +1,45 @@
 import pytest
-
-from ..test_config import client
-
-from P11.server import clubs, competitions
-
-def setup_module(module):
-    global club, initial_points, competition, places_left
-    club = list(filter(lambda x: x['name'] == 'Simply Lift', clubs))[0]
-    competition = list(filter(lambda x: x['name'] == 'Spring Festival', competitions))[0]
-    competition['numberOfPlaces'] = 5
-    initial_points = int(club["points"])
-    places_left = competition['numberOfPlaces']
+from flask_testing import TestCase
+from ..test_config import client, get_clubs, get_competitions
+from P11.server import app
 
 
-def teardown_module(module):
-    club['points'] = str(initial_points)
-    competition['numberOfPlaces'] = places_left
+@pytest.mark.usefixtures('get_clubs')
+@pytest.mark.usefixtures('get_competitions')
+class MyTest(TestCase):
+    def create_app(self):
+        app.config.from_object("P11.tests.test_config")
+        return app
 
+    def test_purchasing_more_places_than_available_in_competition_should_return_status_code_403(self):
+        with self.client:
+            response = self.client.post('/purchasePlaces', data={"places": 12,
+                                                                 "club": "Club Test 1",
+                                                                 "competition": "Incoming Competition"})
+            assert response.status_code == 403
 
-def test_booking_more_places_than_available_in_competition_should_return_status_code_403(client):
-    response = client.post('/purchasePlaces', data={"places": 10,
-                                                    "club": club['name'],
-                                                    "competition": competition['name']})
-    assert response.status_code == 403
+    def test_purchasing_less_or_equal_places_than_available_in_competition_should_return_status_code_200(self):
+        with self.client:
+            response = self.client.post('/purchasePlaces', data={
+                "places": 5,
+                "club": "Club Test 1",
+                "competition": "Incoming Competition"})
+            assert response.status_code == 200
 
+    def test_purchasing_more_places_than_available_in_competition_should_return_flash_message(self):
+        with self.client:
+            place_to_purchase = 12
+            self.client.post('/purchasePlaces', data={"places": place_to_purchase,
+                                                      "club": "Club Test 1",
+                                                      "competition": "Incoming Competition"})
+            competition = next(item for item in self.app.config['P11'].server.competitions
+                               if item["name"] == "Incoming Competition")
+            assert self.flashed_messages[0][0] == f"Sorry, only {competition['numberOfPlaces']} " \
+                                                  f"places left. You can't buy {place_to_purchase}."
 
-def test_booking_less_or_equal_places_than_available_in_competition_should_return_status_code_200(client):
-    response = client.post('/purchasePlaces', data={"places": 3,
-                                                    "club": club['name'],
-                                                    "competition": competition['name']})
-    assert response.status_code == 200
+    def test_purchasing_places_response_should_be_the_expected_html_page_welcome(self):
+        with self.client:
+            self.client.post('/purchasePlaces', data={"places": 10,
+                                                      "club": "Club Test 1",
+                                                      "competition": "Incoming Competition"})
+            self.assert_template_used('welcome.html')
