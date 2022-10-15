@@ -25,6 +25,11 @@ class MyTest(TestCase):
             response = self.client.post('/showSummary', data={'email': 'badfoocom'})
             assert response.status_code == 401
 
+    def test_login_with_bad_or_uncompleted_mail_should_return_flash_message(self):
+        with self.client:
+            self.client.post('/showSummary', data={'email': 'badfoocom'})
+            assert "Sorry, email badfoocom is not associated with a club" in self.flashed_messages[0][0]
+
     def test_login_page_response_should_be_the_expected_html_page_welcome_with_succes_login(self):
         with self.client:
             self.client.post('/showSummary', data={'email': 'mail1@myweb.com'})

@@ -1,8 +1,7 @@
 import pytest
+import datetime
 import P11.server
 from ..server import app
-from ..server import loadClubs, loadCompetitions
-from unittest.mock import patch
 
 
 @pytest.fixture
@@ -30,3 +29,21 @@ def get_clubs(mocker):
          }
     ])
     return clubs
+
+@pytest.fixture
+def get_competitions(mocker):
+    competitions = mocker.patch.object(P11.server, "competitions", [
+        {
+            "name": "Past Competition",
+            "date": datetime.datetime.strftime(datetime.datetime.now() - datetime.timedelta(days=100),
+                                                     "%Y-%m-%d %H:%M:%S"),
+            "numberOfPlaces": "25"
+        },
+        {
+            "name": "Incoming Competition",
+            "date": datetime.datetime.strftime(datetime.datetime.now() + datetime.timedelta(days=100),
+                                                     "%Y-%m-%d %H:%M:%S"),
+            "numberOfPlaces": "13"
+        }
+    ])
+    return competitions
