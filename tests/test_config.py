@@ -25,7 +25,7 @@ def get_clubs(mocker):
         },
         {"name": "Club Test 3",
          "email": "mail3@myweb.com",
-         "points": "12"
+         "points": "15"
          }
     ])
     return clubs
@@ -44,6 +44,12 @@ def get_competitions(mocker, get_clubs):
             "date": datetime.datetime.strftime(datetime.datetime.now() + datetime.timedelta(days=100),
                                                      "%Y-%m-%d %H:%M:%S"),
             "numberOfPlaces": "11"
+        },
+        {
+            "name": "Competition 12",
+            "date": datetime.datetime.strftime(datetime.datetime.now() + datetime.timedelta(days=100),
+                                               "%Y-%m-%d %H:%M:%S"),
+            "numberOfPlaces": "20"
         }
     ])
     for competition in competitions:
