@@ -12,23 +12,19 @@ class MyTest(TestCase):
         return app
 
     def test_booking_places_with_incorrect_club_or_competition_should_return_status_code_403(self):
-        with self.client:
-            response = self.client.get(f"/book/Past Competition2/Club Test 22",
-                                       data={"club": "Club Test 222",
-                                             "competition": "Past Competition2222"})
-            assert response.status_code == 403
+        response = self.client.get(f"/book/Past Competition2/Club Test 22",
+                                   data={"club": "Club Test 222",
+                                         "competition": "Past Competition2222"})
+        assert response.status_code == 403
 
     def test_booking_places_with_incorrect_club_or_competition_should_return_flash_message(self):
-        with self.client:
-            self.client.get(f"/book/Past Competition2/Club Test 22",
-                            data={"club": "Club Test 222",
-                                  "competition": "Past Competition2222"})
-            assert self.flashed_messages[0][0] == "Something went wrong-please try again"
+        self.client.get(f"/book/Past Competition2/Club Test 22",
+                        data={"club": "Club Test 222",
+                              "competition": "Past Competition2222"})
+        assert self.flashed_messages[0][0] == "Something went wrong-please try again"
 
-
-    def test_booking_places_response_should_be_the_expected_html_page_welcome_with_incorrect_club_or_competition(self):
-        with self.client:
-            self.client.get(f"/book/Past Competition2/Club Test 22",
-                            data={"club": "Club Test 222",
-                                  "competition": "Past Competition2222"})
-            self.assert_template_used('welcome.html')
+    def test_booking_places_with_incorrect_club_or_competition_should_use_html_page_welcome_(self):
+        self.client.get(f"/book/Past Competition2/Club Test 22",
+                        data={"club": "Club Test 222",
+                              "competition": "Past Competition2222"})
+        self.assert_template_used('welcome.html')

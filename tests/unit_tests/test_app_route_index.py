@@ -16,8 +16,6 @@ class MyTest(TestCase):
         response = self.client.get('bad')
         assert response.status_code == 404
 
-
-    def test_index_page_response_should_be_the_expected_html_page(self):
-        with self.client:
-            self.client.get('/')
-            self.assert_template_used('index.html')
+    def test_index_route_should_use_html_index_page(self):
+        self.client.get('/')
+        self.assert_template_used('index.html')

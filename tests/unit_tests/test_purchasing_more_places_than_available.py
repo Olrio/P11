@@ -12,34 +12,36 @@ class MyTest(TestCase):
         return app
 
     def test_purchasing_more_places_than_available_in_competition_should_return_status_code_403(self):
-        with self.client:
-            response = self.client.post('/purchasePlaces', data={"places": 12,
-                                                                 "club": "Club Test 1",
-                                                                 "competition": "Incoming Competition"})
-            assert response.status_code == 403
+        response = self.client.post('/purchasePlaces', data={"places": 12,
+                                                             "club": "Club Test 1",
+                                                             "competition": "Incoming Competition"})
+        assert response.status_code == 403
 
     def test_purchasing_less_or_equal_places_than_available_in_competition_should_return_status_code_200(self):
-        with self.client:
-            response = self.client.post('/purchasePlaces', data={
-                "places": 5,
-                "club": "Club Test 1",
-                "competition": "Incoming Competition"})
-            assert response.status_code == 200
+        response = self.client.post('/purchasePlaces', data={
+            "places": 5,
+            "club": "Club Test 1",
+            "competition": "Incoming Competition"})
+        assert response.status_code == 200
 
     def test_purchasing_more_places_than_available_in_competition_should_return_flash_message(self):
-        with self.client:
-            place_to_purchase = 12
-            self.client.post('/purchasePlaces', data={"places": place_to_purchase,
-                                                      "club": "Club Test 1",
-                                                      "competition": "Incoming Competition"})
-            competition = next(item for item in self.app.config['P11'].server.competitions
-                               if item["name"] == "Incoming Competition")
-            assert self.flashed_messages[0][0] == f"Sorry, only {competition['numberOfPlaces']} " \
-                                                  f"places left. You can't buy {place_to_purchase}."
+        place_to_purchase = 12
+        self.client.post('/purchasePlaces', data={"places": place_to_purchase,
+                                                  "club": "Club Test 1",
+                                                  "competition": "Incoming Competition"})
+        competition = next(item for item in self.app.config['P11'].server.competitions
+                           if item["name"] == "Incoming Competition")
+        assert self.flashed_messages[0][0] == f"Sorry, only {competition['numberOfPlaces']} " \
+                                              f"places left. You can't buy {place_to_purchase}."
 
-    def test_purchasing_places_response_should_be_the_expected_html_page_welcome(self):
-        with self.client:
-            self.client.post('/purchasePlaces', data={"places": 10,
-                                                      "club": "Club Test 1",
-                                                      "competition": "Incoming Competition"})
-            self.assert_template_used('welcome.html')
+    def test_purchasing_less_or_equal_places_than_available_in_competition_should_use_html_page_welcome(self):
+        self.client.post('/purchasePlaces', data={"places": 10,
+                                                  "club": "Club Test 1",
+                                                  "competition": "Incoming Competition"})
+        self.assert_template_used('welcome.html')
+
+    def test_purchasing_more_places_than_available_in_competition_should_use_html_page_welcome(self):
+        self.client.post('/purchasePlaces', data={"places": 12,
+                                                  "club": "Club Test 1",
+                                                  "competition": "Incoming Competition"})
+        self.assert_template_used('welcome.html')

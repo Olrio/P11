@@ -22,6 +22,7 @@ def test_loadclubs(mock_json_load):
     assert loadClubs()[0]['name'] == "Club Test 1"
     assert loadClubs()[1]['email'] == "email@clubtest2.com"
 
+
 @patch("P11.server.json.load")
 def test_loadcompetitions(mock_json_load):
     mock_json_load.return_value = dict({"competitions": [
