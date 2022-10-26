@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <title>Available points by club</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/board.css') }}">
+<style>
+    tbody tr:nth-child(odd):hover {
+    background-color:#e6efef;
+    }
+    tbody tr:nth-child(even):hover {
+    background-color:#e6efef;
+    }
+</style>
 </head>
 <body>
 <table style="width:80%">
@@ -21,14 +29,6 @@
        <td>{{ club['points'] }}</td>
     </tr>
     {% endfor%}
-    <style>
-        tbody tr:nth-child(odd):hover {
-        background-color:#e6efef;
-        }
-        tbody tr:nth-child(even):hover {
-        background-color:#e6efef;
-        }
-    </style>
     </tbody>
 </table>
 <a href="{{ url_for('index') }}">Home</a>

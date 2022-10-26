@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from P11.server import app
 from ..test_config import client, get_clubs, get_competitions
 
+
 @pytest.mark.usefixtures('get_clubs')
 @pytest.mark.usefixtures('get_competitions')
 class TestglobalPurchase(LiveServerTestCase):
