@@ -48,4 +48,15 @@
 
     We also like to show how well we're testing, so there's a module called 
     [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
+   
+   All tests scripts are stored in `tests` directory. Most of the tests are unit tests (in `tests/unit_tests` directory).
+   There are also some functionnal tests in the `tests/functionnal_tests` directory.
+
+   To launch all tests, use the following command : `pytest`. More information is available using the `-v` option : `pytest -v`.
+
+   To perform a specific test, use the following command :`pytest  tests/<test subdirectory>/<test filename>`
+
+   To control the scripts coverage by tests, use  the following command : `pytest --cov`. If you want a detailed report, use the command `pytest --cov --cov-report html` which will genrate a `index.html` file in the `htmlcov` directory. Opening this file in a browser enables you to have more acurate information on coverage testing of this Flask app.
+
+
 
