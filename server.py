@@ -1,17 +1,18 @@
-import json, datetime
-from flask import Flask,render_template,request,redirect,flash,url_for
+import json
+import datetime
+from flask import Flask, render_template, request, redirect, flash, url_for
 
 
 def loadClubs():
     with open('clubs.json') as c:
-         listOfClubs = json.load(c)['clubs']
-         return listOfClubs
+        listOfClubs = json.load(c)['clubs']
+        return listOfClubs
 
 
 def loadCompetitions():
     with open('competitions.json') as comps:
-         listOfCompetitions = json.load(comps)['competitions']
-         return listOfCompetitions
+        listOfCompetitions = json.load(comps)['competitions']
+        return listOfCompetitions
 
 
 app = Flask(__name__)
@@ -23,9 +24,11 @@ for competition in competitions:
     for club in clubs:
         competition[club['name']] = 0
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
