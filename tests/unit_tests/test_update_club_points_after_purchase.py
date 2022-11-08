@@ -3,6 +3,7 @@ from flask_testing import TestCase
 from ..test_config import client, get_clubs, get_competitions
 from P11.server import app
 
+
 @pytest.mark.usefixtures('get_clubs')
 @pytest.mark.usefixtures('get_competitions')
 class MyTest(TestCase):
