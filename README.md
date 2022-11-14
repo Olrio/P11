@@ -31,9 +31,7 @@
 
     - Rather than hunting around for the packages you need, you can install in one step. Type <code>pip install -r requirements.txt</code>. This will install all the packages listed in the respective file. If you install a package, make sure others know by updating the requirements.txt file. An easy way to do this is <code>pip freeze > requirements.txt</code>
 
-    - Flask requires that you set an environmental variable to the python file. However you do that, you'll want to set the file to be <code>server.py</code>. Check [here](https://flask.palletsprojects.com/en/1.1.x/quickstart/#a-minimal-application) for more details
-
-    - You should now be ready to test the application. In the directory, type either <code>flask run</code> or <code>python -m flask run</code>. The app should respond with an address you should be able to go to using your browser.
+    - Type `python server.py` to run the app
 
 4. Current Setup
 
@@ -50,7 +48,12 @@
     [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
    
    All tests scripts are stored in `tests` directory. Most of the tests are unit tests (in `tests/unit_tests` directory).
-   There are also some functionnal tests in the `tests/functionnal_tests` directory.
+   
+   An integration test can be found in `tests/integration_tests`.
+
+   There are also some functionnal tests in the `tests/functionnal_tests` directory. Those functionnal tests require you to install `selenium`.
+   Installing this framework needs to follow different steps depending on both your Operating System and the Internet Browser you use.
+   That's why we recommend you to follow instructions here : https://selenium-python.readthedocs.io/installation.html
 
    To launch all tests, use the following command : `pytest`. More information is available using the `-v` option : `pytest -v`.
 
